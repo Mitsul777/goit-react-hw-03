@@ -11,21 +11,25 @@ const initialValues = {
     phone: ""
 };
 
-const ContactForm = () => {
+const ContactForm = ({onAdd}) => {
     const nameFieldId = nanoid();
     const phoneFieldId = nanoid();
     const validationSchema = Yup.object().shape({
         username: Yup.string()
-            .min(3, "Username must be at least 3 characters")
-            .max(50, "Username must be at most 50 characters")
-            .required("Username is required"),
-        phone: Yup.string().matches(/^\d{3}-\d{3}-\d{4}$/, "Invalid phone number format") // Перевірка формату номера телефону
+            .min(3, "Required")
+            .max(50, "Required")
+            .required("Required"),
+        phone: Yup.string().matches(/^\d{3}-\d{2}-\d{2}$/, "Required") // Перевірка формату номера телефону
     });
-    const handleSubmit = (values, actions) => {
-        console.log(values);
-        actions.resetForm();
-    };
 
+    const handleSubmit = (values, actions) => {
+        onAdd({
+            id: nanoid(),
+            name: values.username,
+            number: values.phone
+        });
+        actions.resetForm()
+    };
 
     return (
         <div className={styles["form-container"]}>
@@ -34,15 +38,17 @@ const ContactForm = () => {
                     <div className={styles["form-group"]}>
                         <label htmlFor={nameFieldId} className={styles["label"]}>Name</label>
                         <Field type="text" name="username" id={nameFieldId} className={styles["input"]}  />
-                        <ErrorMessage name="username" as="span" className={styles.errorMessage} />
                     </div>
-
+                    <span className={styles["errorMessage"]}>
+                        <ErrorMessage name="username" as="span" className={styles["errorMessage"]} />
+                    </span>
                     <div className={styles["form-group"]}>
                         <label htmlFor={phoneFieldId} className={styles["label"]}>Number</label>
                         <Field type="phone" name="phone" id={phoneFieldId} className={styles["input"]} />
-                        <ErrorMessage name="phone" as="span" className={styles.errorMessage} />
                     </div>
-
+                    <span className={styles["errorMessage"]}>
+                         <ErrorMessage name="phone" as="span" />
+                    </span>
                     <button type="submit" className={styles["button"]}>Submit</button>
                 </Form>
             </Formik>
