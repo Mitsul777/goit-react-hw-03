@@ -40,12 +40,5 @@ function App() {
         </div>
     );
 }
-const getContactsFromLocalStorage = () => {
-    const savedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return savedContacts ? JSON.parse(savedContacts) : initialContacts;
-};
-const saveContactsToLocalStorage = (contacts) => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
-};
 
 export default App
